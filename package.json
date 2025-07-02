@@ -1,0 +1,23 @@
+{
+  "name": "markedit-backend",
+  "version": "0.1.0",
+  "description": "Backend for Markedit",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rragoomundun/markedit-backend.git"
+  },
+  "author": "Raphael Ragoomundun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rragoomundun/markedit-backend/issues"
+  },
+  "homepage": "https://github.com/rragoomundun/markedit-backend#readme",
+  "dependencies": {
+    "apidoc": "^1.2.0"
+  }
+}
