@@ -11,6 +11,10 @@ import xssProtectMiddleware from './middlewares/xssProtect.middleware.js';
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 
+import setupDatabase from './setupDatabase.js';
+
+setupDatabase();
+
 const app = express();
 
 // Set static folder

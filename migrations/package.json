@@ -1,0 +1,16 @@
+{
+  "name": "markedit-migrations",
+  "version": "1.0.0",
+  "description": "Markedit database's migrations tools",
+  "main": "",
+  "scripts": {
+    "migration:create": "npx sequelize-cli migration:create",
+    "migration:migrate": "npx sequelize-cli db:migrate",
+    "migration:rollback": "npx sequelize-cli db:migrate:undo"
+  },
+  "author": "Raphael Ragoomundun",
+  "license": "MIT",
+  "dependencies": {
+    "sequelize-cli": "^6.6.3"
+  }
+}
