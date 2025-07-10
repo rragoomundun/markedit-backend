@@ -1,7 +1,7 @@
-import User from './models/User.model.js';
-import Token from './models/Token.model.js';
-import Folder from './models/Folder.model.js';
-import Page from './models/Page.model.js';
+import User from './models/User.js';
+import Token from './models/Token.js';
+import Folder from './models/Folder.js';
+import Page from './models/Page.js';
 
 const setupDatabase = () => {
   User.hasMany(Token, {
@@ -41,7 +41,7 @@ const setupDatabase = () => {
     }
   });
 
-  Page.hasOne(User, {
+  User.hasOne(Page, {
     foreignKey: {
       name: 'user_id',
       allowNull: false

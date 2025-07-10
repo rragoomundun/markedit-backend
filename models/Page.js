@@ -2,19 +2,22 @@ import { DataTypes } from 'sequelize';
 
 import dbUtil from '../utils/db.util.js';
 
-const Folder = dbUtil.define(
-  'Folder',
+const Page = dbUtil.define(
+  'Page',
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    name: {
+    title: {
       type: DataTypes.STRING
     },
+    content: {
+      type: DataTypes.TEXT
+    },
     position: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     created_at: {
@@ -28,8 +31,8 @@ const Folder = dbUtil.define(
   },
   {
     timestamps: false,
-    tableName: 'folders'
+    tableName: 'pages'
   }
 );
 
-export default Folder;
+export default Page;

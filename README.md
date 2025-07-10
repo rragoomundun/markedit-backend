@@ -31,6 +31,39 @@ DB_HOST=
 
 # The database port
 DB_PORT=
+
+
+# AWS API Access Key
+AWS_ACCESS_KEY_ID=accesskeyid
+
+# AWS API Secret Access Key
+AWS_SECRET_ACCESS_KEY=secretaccesskey
+
+# AWS S3 Upload Bucket Region
+AWS_S3_REGION=s3region
+
+# AWS S3 bucket name
+AWS_S3_BUCKET_NAME=
+
+# AWS SES region
+AWS_SES_REGION=sesregion
+
+
+# From email name
+FROM_NAME=Markedit
+
+# From email address
+FROM_EMAIL=noreply@ex.com
+
+# Reply email address
+REPLY_EMAIL=contact@ex.com
+
+
+# The production front end URL
+APP_PROD_URL=https://app.markedit.net
+
+# The development front end URL
+APP_DEV_URL=https://app-dev.markedit.net
 ```
 
 ## Migrations
