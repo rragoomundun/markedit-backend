@@ -153,6 +153,26 @@ const login = async (req, res, next) => {
 };
 
 /**
+ * @api {GET} /auth/logout Logout
+ * @apiGroup Auth
+ * @apiName AuthLogout
+ *
+ * @apiDescription Logout user by clearing token cookie.
+ *
+ * @apiPermission Private
+ */
+const logout = async (req, res, next) => {
+  res
+    .cookie('token', 'none', {
+      expires: new Date(Date.now() + 10 * 1000),
+      sameSite: 'None',
+      secure: true
+    })
+    .status(httpStatus.OK)
+    .end();
+};
+
+/**
  * @api {POST} /auth/password/forgot Forgot Password
  * @apiGroup Auth
  * @apiName AuthForgotPassword
@@ -281,4 +301,4 @@ const sendTokenResponse = async (userId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm, login, forgotPassword, resetPassword };
+export { register, registerConfirm, login, logout, forgotPassword, resetPassword };

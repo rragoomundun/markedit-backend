@@ -12,6 +12,7 @@
     "AuthRegister",
     "AuthRegisterConfirm",
     "AuthLogin",
+    "AuthLogout",
     "AuthForgotPassword",
     "AuthResetPassword"
   ],
