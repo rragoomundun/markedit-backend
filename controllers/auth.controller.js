@@ -173,6 +173,54 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+/**
+ * @api {POST} /auth/password/reset/:resetPasswordToken Reset Password
+ * @apiGroup Auth
+ * @apiName AuthResetPassword
+ *
+ * @apiDescription Reset user password
+ *
+ * @apiParam {String} resetPasswordToken User's confirmation token
+ * @apiBody {String{12..}} password User's new password
+ * @apiBody {String{12...}} passwordConfirmation The password confirmation
+ *
+ * @apiParamExample {json} Body Example
+ * {
+ *   "password": "J9u21k%cde1t",
+ *   "passwordConfirmation": "J9u21k%cde1t"
+ * }
+ *
+ * @apiSuccess (Success (200)) {String} token JWT token
+ * @apiSuccessExample Success Example
+ * {
+ *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNmY0MDQ1MzVlNzU3NWM1NGExNTMyNyIsImlhdCI6MTU4NDM0OTI1MywiZXhwIjoxNTg2OTQxMjUzfQ.2f59_zRuYVXADCQWnQb6mG8NG3zulj12HZCgoIdMEfw"
+ * }
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ * @apiError (Error (400)) INVALID_TOKEN Invalid token
+ *
+ * @apiPermission Public
+ */
+const resetPassword = async (req, res, next) => {
+  const { resetPasswordToken } = req.params;
+  const { password } = req.body;
+
+  const token = await Token.findOne({ where: { value: cryptUtil.getDigestHash(resetPasswordToken) } });
+
+  if (!token) {
+    return next(new ErrorResponse('Invalid token', httpStatus.BAD_REQUEST, 'INVALID_TOKEN'));
+  }
+
+  const user = await User.findOne({ where: { id: token.user_id } });
+
+  user.password = password;
+
+  await user.save();
+  await token.destroy();
+
+  sendTokenResponse(user.id, httpStatus.OK, res);
+};
+
 // Create token from model, create cookie, and send response
 const sendTokenResponse = async (userId, statusCode, res) => {
   const user = await User.findOne({ where: { id: userId } });
@@ -187,4 +235,4 @@ const sendTokenResponse = async (userId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm, forgotPassword };
+export { register, registerConfirm, forgotPassword, resetPassword };
