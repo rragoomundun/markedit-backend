@@ -39,6 +39,11 @@ const registerValidator = validation([
     })
 ]);
 
+const loginValidator = validation([
+  body('email').notEmpty().withMessage('EMPTY'),
+  body('password').notEmpty().withMessage('EMPTY')
+]);
+
 const forgotPasswordValidator = validation([
   body('email')
     .notEmpty()
@@ -72,4 +77,4 @@ const resetPasswordValidator = validation([
     })
 ]);
 
-export { registerValidator, forgotPasswordValidator, resetPasswordValidator };
+export { registerValidator, loginValidator, forgotPasswordValidator, resetPasswordValidator };
