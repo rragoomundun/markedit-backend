@@ -106,6 +106,73 @@ const registerConfirm = async (req, res, next) => {
   sendTokenResponse(userId, httpStatus.OK, res);
 };
 
+/**
+ * @api {POST} /auth/password/forgot Forgot Password
+ * @apiGroup Auth
+ * @apiName AuthForgotPassword
+ *
+ * @apiDescription Generate reset password token and send reset email
+ *
+ * @apiBody {String} email User's email
+ *
+ * @apiParamExample {json} Body Example
+ * {
+ *   "email": "raphael@ex.com"
+ * }
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ * @apiError (Error (401)) UNCONFIRMED The account is unconfirmed
+ * @apiError (Error (409)) ALREADY_RECOVERING A recovery procedure is already in progress
+ * @apiError (Error (500)) EMAIL_SENDING_FAILED Cannot send recovery email
+ *
+ * @apiPermission Public
+ */
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ where: { email } });
+  const token = await Token.findOne({ where: { user_id: user.id } });
+
+  if (token) {
+    if (token.type === 'register-confirm') {
+      return next(new ErrorResponse('Acount unconfirmed', httpStatus.UNAUTHORIZED, 'UNCONFIRMED'));
+    } else if (token.type === 'password-reset') {
+      return next(
+        new ErrorResponse(
+          'A password recovery procedure is already in progress',
+          httpStatus.CONFLICT,
+          'ALREADY_RECOVERING'
+        )
+      );
+    }
+  }
+
+  const passwordResetToken = await Token.create({
+    type: 'password-reset',
+    value: 'empty',
+    expire: Date.now(),
+    user_id: user.id
+  });
+  const resetPasswordTokenValue = await passwordResetToken.generateToken();
+
+  try {
+    const mailOptions = {
+      mail: 'passwordForgotten',
+      userId: user.id,
+      templateOptions: {
+        resetLink: `${process.env.APP_URL}/auth/password/reset/${resetPasswordTokenValue}`
+      }
+    };
+
+    await mailUtil.send(mailOptions);
+
+    res.status(httpStatus.OK).end();
+  } catch {
+    await passwordResetToken.destroy();
+    return next(new ErrorResponse('Cannot send email', httpStatus.INTERNAL_SERVER_ERROR, 'EMAIL_SENDING_FAILED'));
+  }
+};
+
 // Create token from model, create cookie, and send response
 const sendTokenResponse = async (userId, statusCode, res) => {
   const user = await User.findOne({ where: { id: userId } });
@@ -120,4 +187,4 @@ const sendTokenResponse = async (userId, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({ token });
 };
 
-export { register, registerConfirm };
+export { register, registerConfirm, forgotPassword };

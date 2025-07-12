@@ -39,4 +39,17 @@ const registerValidator = validation([
     })
 ]);
 
-export { registerValidator };
+const forgotPasswordValidator = validation([
+  body('email')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom(async (email) => {
+      const user = await User.findOne({ where: { email } });
+
+      if (!user) {
+        throw new Error('NO_ACCOUNT_FOR_EMAIL');
+      }
+    })
+]);
+
+export { registerValidator, forgotPasswordValidator };
