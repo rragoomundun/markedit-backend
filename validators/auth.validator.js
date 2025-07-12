@@ -39,4 +39,42 @@ const registerValidator = validation([
     })
 ]);
 
-export { registerValidator };
+const loginValidator = validation([
+  body('email').notEmpty().withMessage('EMPTY'),
+  body('password').notEmpty().withMessage('EMPTY')
+]);
+
+const forgotPasswordValidator = validation([
+  body('email')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom(async (email) => {
+      const user = await User.findOne({ where: { email } });
+
+      if (!user) {
+        throw new Error('NO_ACCOUNT_FOR_EMAIL');
+      }
+    })
+]);
+
+const resetPasswordValidator = validation([
+  body('password')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .isLength({ min: 8 })
+    .withMessage('PASSWORD_MIN_LENGTH_8')
+    .isStrongPassword()
+    .withMessage('PASSWORD_NOT_STRONG'),
+  body('passwordConfirmation')
+    .notEmpty()
+    .withMessage('EMPTY')
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('PASSWORD_CONFIRMATION_NO_MATCH');
+      }
+
+      return true;
+    })
+]);
+
+export { registerValidator, loginValidator, forgotPasswordValidator, resetPasswordValidator };

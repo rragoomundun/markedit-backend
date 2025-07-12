@@ -59,6 +59,20 @@ FROM_EMAIL=noreply@ex.com
 REPLY_EMAIL=contact@ex.com
 
 
+# JWT Token secret code
+JWT_SECRET=secret
+
+# JWT Token duration. On this example it will expire in 180 days
+JWT_EXPIRE=180d
+
+# JWT Token cookie duration. The value is in days.
+JWT_COOKIE_EXPIRE=180
+
+
+# Clear token cron execution date
+CLEAR_TOKENS_CRON_DATE=* * * * *
+
+
 # The production front end URL
 APP_PROD_URL=https://app.markedit.net
 

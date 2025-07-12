@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { DataTypes } from 'sequelize';
 
 import dbUtil from '../utils/db.util.js';
@@ -31,8 +33,26 @@ const User = dbUtil.define(
   },
   {
     timestamps: false,
-    tableName: 'users'
+    tableName: 'users',
+    hooks: {
+      beforeSave: async (user) => {
+        if (user.changed('password')) {
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+      }
+    }
   }
 );
+
+User.prototype.verifyPassword = async (password, hash) => {
+  return await bcrypt.compare(password, hash);
+};
+
+User.prototype.getSignedJWTToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE
+  });
+};
 
 export default User;
