@@ -19,7 +19,8 @@
     "User",
     "UserGet",
     "UserUpdateIdentity",
-    "UserUpdatePassword"
+    "UserUpdatePassword",
+    "UserDelete"
   ],
   "template": {
     "forceLanguage": "en",

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getUser, updateUserIdentity, updateUserPassword } from '../controllers/user.controller.js';
+import { getUser, updateUserIdentity, updateUserPassword, deleteUserAccount } from '../controllers/user.controller.js';
 
 import { updateIdentityValidator, updatePasswordValidator } from '../validators/user.validator.js';
 
@@ -11,6 +11,7 @@ const router = express.Router();
 router
   .get('/', authenticateMiddleware, getUser)
   .put('/identity', authenticateMiddleware, updateIdentityValidator, updateUserIdentity)
-  .put('/password', authenticateMiddleware, updatePasswordValidator, updateUserPassword);
+  .put('/password', authenticateMiddleware, updatePasswordValidator, updateUserPassword)
+  .delete('/', authenticateMiddleware, deleteUserAccount);
 
 export default router;

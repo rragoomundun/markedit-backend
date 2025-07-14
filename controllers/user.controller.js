@@ -91,4 +91,18 @@ const updateUserPassword = async (req, res, next) => {
   res.status(httpStatus.OK).end();
 };
 
-export { getUser, updateUserIdentity, updateUserPassword };
+/**
+ * @api {DELETE} /user Delete Account
+ * @apiGroup User
+ * @apiName UserDelete
+ *
+ * @apiDescription Delete user account.
+ *
+ * @apiPermission Private
+ */
+const deleteUserAccount = async (req, res, next) => {
+  await User.destroy({ where: { id: req.user.id } });
+  res.status(httpStatus.OK).end();
+};
+
+export { getUser, updateUserIdentity, updateUserPassword, deleteUserAccount };
