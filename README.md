@@ -144,6 +144,6 @@ npm run prod
 npm run gendoc
 ```
 
-- Version: 0.2.0
+- Version: 0.3.0
 - License: MIT
 - Author: Raphael Ragoomundun
