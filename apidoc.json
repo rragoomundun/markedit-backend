@@ -18,7 +18,8 @@
     "AuthAuthorized",
     "User",
     "UserGet",
-    "UserUpdateIdentity"
+    "UserUpdateIdentity",
+    "UserUpdatePassword"
   ],
   "template": {
     "forceLanguage": "en",

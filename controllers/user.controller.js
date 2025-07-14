@@ -59,4 +59,36 @@ const updateUserIdentity = async (req, res, next) => {
 
   res.status(httpStatus.OK).end();
 };
-export { getUser, updateUserIdentity };
+
+/**
+ * @api {PUT} /user/password Update Password
+ * @apiGroup User
+ * @apiName UserUpdatePassword
+ *
+ * @apiDescription Update user's password.
+ *
+ * @apiBody {String} password Updated password
+ * @apiBody {String} passwordConfirmation Updated password confirmation
+ *
+ * @apiParamExample {json} Body Example
+ * {
+ *   "password": "pfs83a01jH;B",
+ *   "passwordConfirmation": "pfs83a01jH;B"
+ * }
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ *
+ * @apiPermission Private
+ */
+const updateUserPassword = async (req, res, next) => {
+  const { password } = req.body;
+  const user = await User.findOne({ where: { id: req.user.id } });
+
+  user.password = password;
+
+  await user.save();
+
+  res.status(httpStatus.OK).end();
+};
+
+export { getUser, updateUserIdentity, updateUserPassword };
