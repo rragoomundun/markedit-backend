@@ -28,4 +28,35 @@ const getUser = async (req, res, next) => {
   res.status(httpStatus.OK).json(req.user);
 };
 
-export { getUser };
+/**
+ * @api {PUT} /user/identity Update Identity
+ * @apiGroup User
+ * @apiName UserUpdateIdentity
+ *
+ * @apiDescription Update user's identity.
+ *
+ * @apiBody {String} name Updated name
+ * @apiBody {String} email Updated email
+ *
+ * @apiParamExample {json} Body Example
+ * {
+ *   "name": "Raphael",
+ *   "email": "raphael@ex.com"
+ * }
+ *
+ * @apiError (Error (400)) INVALID_PARAMETERS One or more parameters are invalid
+ *
+ * @apiPermission Private
+ */
+const updateUserIdentity = async (req, res, next) => {
+  const { name, email } = req.body;
+  const user = await User.findOne({ where: { id: req.user.id } });
+
+  user.name = name;
+  user.email = email;
+
+  await user.save();
+
+  res.status(httpStatus.OK).end();
+};
+export { getUser, updateUserIdentity };

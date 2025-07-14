@@ -17,7 +17,8 @@
     "AuthResetPassword",
     "AuthAuthorized",
     "User",
-    "UserGet"
+    "UserGet",
+    "UserUpdateIdentity"
   ],
   "template": {
     "forceLanguage": "en",
